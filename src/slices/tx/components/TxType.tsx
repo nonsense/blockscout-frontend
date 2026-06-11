@@ -7,12 +7,18 @@ import type { schemas } from '@blockscout/api-types';
 import type { BadgeProps } from 'src/toolkit/chakra/badge';
 import { Badge } from 'src/toolkit/chakra/badge';
 
+type TransactionType = schemas['Transaction']['transaction_types'][number] |
+  'op_stack_l1_attributes_transaction' |
+  'op_stack_post_exec_transaction';
+
 export interface Props extends BadgeProps {
-  types: schemas['Transaction']['transaction_types'];
+  types: Array<TransactionType>;
   isLoading?: boolean;
 }
 
-const TYPES_ORDER: schemas['Transaction']['transaction_types'] = [
+const TYPES_ORDER: Array<TransactionType> = [
+  'op_stack_l1_attributes_transaction',
+  'op_stack_post_exec_transaction',
   'blob_transaction',
   'rootstock_remasc',
   'rootstock_bridge',
@@ -58,6 +64,14 @@ const TxType = ({ types, isLoading, ...rest }: Props) => {
       label = 'Coin transfer';
       colorPalette = 'orange';
       break;
+    case 'op_stack_l1_attributes_transaction':
+      label = 'L1 attr tx';
+      colorPalette = 'green';
+      break;
+    case 'op_stack_post_exec_transaction':
+      label = 'Post exec tx';
+      colorPalette = 'green';
+      break;
     case 'rootstock_remasc':
       label = 'REMASC';
       colorPalette = 'blue';
@@ -76,8 +90,8 @@ const TxType = ({ types, isLoading, ...rest }: Props) => {
   }
 
   return (
-    <Badge colorPalette={ colorPalette } loading={ isLoading } { ...rest }>
-      { label }
+    <Badge colorPalette={colorPalette} loading={isLoading} {...rest}>
+      {label}
     </Badge>
   );
 };
